@@ -6,11 +6,12 @@ import Logo from './Logo';
 import UpdatedResourcesSection from './UpdatedResourcesSection';
 import UpdatedEventsSection from './UpdatedEventsSection';
 import ProfilePages from './ProfilePages';
+import JournalPage from '../pages/JournalPage';
 import CleanTimeTracker from './CleanTimeTracker';
 
 type AppState = 'splash' | 'onboarding' | 'main';
 type ActiveTab = 'home' | 'resources' | 'events' | 'profile';
-type ProfilePage = 'main' | 'change-nickname' | 'set-clean-date' | 'privacy' | 'help' | 'clean-tracker';
+type ProfilePage = 'main' | 'change-nickname' | 'set-clean-date' | 'privacy' | 'help' | 'clean-tracker' | 'journal';
 
 const UpdatedMainApp: React.FC = () => {
   const [appState, setAppState] = useState<AppState>('splash');
@@ -90,7 +91,11 @@ const UpdatedMainApp: React.FC = () => {
           <ProfileSection userNickname={userNickname} onNavigate={setProfilePage} />
         )}
         
-        {activeTab === 'profile' && profilePage !== 'main' && (
+        {activeTab === 'profile' && profilePage === 'journal' && (
+          <JournalPage onBack={() => setProfilePage('main')} />
+        )}
+        
+        {activeTab === 'profile' && profilePage !== 'main' && profilePage !== 'journal' && (
           <ProfilePages
             currentPage={profilePage}
             onBack={() => setProfilePage('main')}
@@ -168,8 +173,8 @@ const ProfileSection: React.FC<{ userNickname: string; onNavigate: (page: Profil
           <button onClick={() => onNavigate('set-clean-date')} className="w-full bg-white/10 hover:bg-white/20 text-white py-3 px-4 rounded-lg text-left transition-colors">
             {daysClean > 0 ? 'Update Clean Date' : 'Set Clean Date'}
           </button>
-          <button onClick={() => onNavigate('clean-tracker')} className="w-full bg-white/10 hover:bg-white/20 text-white py-3 px-4 rounded-lg text-left transition-colors">
-            View Clean Time Tracker
+          <button onClick={() => onNavigate('journal')} className="w-full bg-white/10 hover:bg-white/20 text-white py-3 px-4 rounded-lg text-left transition-colors">
+            Journal
           </button>
           <button onClick={() => onNavigate('privacy')} className="w-full bg-white/10 hover:bg-white/20 text-white py-3 px-4 rounded-lg text-left transition-colors">
             Privacy Settings

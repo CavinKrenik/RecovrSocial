@@ -2,7 +2,8 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ExternalLink } from 'lucide-react';
-
+import AddEventForm from './AddEventForm';
+import UserSubmittedEvents from './UserSubmittedEvents';
 const SoberEventPlatforms: React.FC = () => {
   const additionalPlatforms = [
     {
@@ -57,6 +58,9 @@ const SoberEventPlatforms: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      <AddEventForm />
+      <UserSubmittedEvents />
+      
       <div className="space-y-4">
         {additionalPlatforms.map((platform, index) => (
           <Card key={index} className="bg-white/10 backdrop-blur-sm border-white/20">

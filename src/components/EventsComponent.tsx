@@ -32,18 +32,7 @@ const EventsComponent: React.FC = () => {
       isRSVP: false,
       registrationUrl: 'https://chamber.masonchamber.com'
     },
-    {
-      id: '2',
-      title: 'Brushes & Bevees: Zero-Proof Paint & Sip',
-      description: 'An alcohol-free paint-and-sip workshop. Create art while enjoying zero-proof beverages.',
-      date: 'July 18, 2025',
-      time: '7:00 PM - 9:00 PM',
-      location: 'Sober AF Bottle Shop, 5222 S Tacoma Way, Tacoma, WA',
-      category: 'Art & Creativity',
-      attendees: 12,
-      isRSVP: false,
-      registrationUrl: 'https://thesobercurator.com'
-    },
+
     {
       id: '3',
       title: 'Open Mic Night @ Sober AF Bottle Shop',
@@ -56,18 +45,7 @@ const EventsComponent: React.FC = () => {
       isRSVP: false,
       registrationUrl: 'https://thesobercurator.com'
     },
-    {
-      id: '4',
-      title: 'Living Room Sober Picnic & BBQ',
-      description: 'Summer potluck picnic hosted by the NA Living Room home group. Family-friendly fellowship.',
-      date: 'July 26, 2025',
-      time: '12:00 PM - 5:00 PM',
-      location: 'Fort Steilacoom Park (Shelter #1), Lakewood, WA',
-      category: 'Social',
-      attendees: 25,
-      isRSVP: false,
-      registrationUrl: 'https://pcana.org'
-    },
+
     {
       id: '5',
       title: 'WA Oxford House Campout',

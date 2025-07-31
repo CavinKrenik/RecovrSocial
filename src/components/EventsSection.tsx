@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -6,6 +6,8 @@ import { Calendar, MapPin, Clock, Users, Phone } from 'lucide-react';
 import { julyEvents } from './JulyEvents';
 import { augustEvents } from './AugustEvents';
 import { septemberEvents } from './SeptemberEvents';
+import EventSuggestionModal from './EventSuggestionModal';
+import { eventService, UserEvent } from '@/services/eventService';
 
 interface Event {
   id: string;
@@ -74,8 +76,59 @@ const EventsSection: React.FC = () => {
     }
   ];
 
-  const allEvents = [...weeklyEvents, ...julyEvents, ...augustEvents, ...septemberEvents];
-  const [events, setEvents] = useState<Event[]>(allEvents);
+  // Load user-submitted events using eventService
+  const loadUserEvents = async () => {
+    try {
+      const userEvents = await eventService.getEvents();
+      
+      return userEvents.map((event: UserEvent) => ({
+        id: event.id,
+        title: event.name,
+        description: event.details || 'Community submitted event',
+        date: new Date(event.date).toLocaleDateString(),
+        time: event.time || 'Time TBD',
+        location: event.location || 'Location TBD',
+        category: 'Community',
+        attendees: 0,
+        isRSVP: false,
+        registrationUrl: event.website || undefined,
+        sortDate: new Date(event.date),
+        isRecurring: false
+      }));
+    } catch (error) {
+      console.error('Error loading user events:', error);
+      return [];
+    }
+  };
+
+  const [userEvents, setUserEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Load events on component mount
+  useEffect(() => {
+    const initializeEvents = async () => {
+      const loadedUserEvents = await loadUserEvents();
+      setUserEvents(loadedUserEvents);
+      const allEvents = [...weeklyEvents, ...julyEvents, ...augustEvents, ...septemberEvents, ...loadedUserEvents];
+      setEvents(allEvents);
+    };
+    
+    initializeEvents();
+  }, []);
+
+  // Listen for events updates and refresh the list
+  useEffect(() => {
+    const handleEventsUpdate = async () => {
+      const updatedUserEvents = await loadUserEvents();
+      setUserEvents(updatedUserEvents);
+      const updatedAllEvents = [...weeklyEvents, ...julyEvents, ...augustEvents, ...septemberEvents, ...updatedUserEvents];
+      setEvents(updatedAllEvents);
+    };
+
+    window.addEventListener('eventsUpdated', handleEventsUpdate);
+    return () => window.removeEventListener('eventsUpdated', handleEventsUpdate);
+  }, []);
 
   const handleRSVP = (eventId: string) => {
     setEvents(events.map(event => {
@@ -128,6 +181,16 @@ const EventsSection: React.FC = () => {
           <p>Showing {sortedEvents.length} total events</p>
           <p>July-September 2025: {totalScheduledEvents} scheduled events</p>
           <p>July: {julyCount} • August: {augustCount} • September: {septemberCount}</p>
+        </div>
+        
+        {/* Move Suggest an Event button to the top */}
+        <div className="mt-6">
+          <Button 
+            onClick={() => setIsModalOpen(true)}
+            className="bg-teal-500 hover:bg-teal-600 text-white px-6 py-2"
+          >
+            Suggest an Event
+          </Button>
         </div>
       </div>
 
@@ -206,11 +269,12 @@ const EventsSection: React.FC = () => {
         ))}
       </div>
 
-      <div className="text-center pt-4">
-        <Button className="bg-white/10 hover:bg-white/20 text-white border border-white/20">
-          Suggest an Event
-        </Button>
-      </div>
+
+      
+      <EventSuggestionModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
     </div>
   );
 };
