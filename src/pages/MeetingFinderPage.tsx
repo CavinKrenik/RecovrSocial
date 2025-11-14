@@ -28,12 +28,12 @@ const MeetingFinderPage: React.FC<MeetingFinderPageProps> = ({ onBack }) => {
   const meetings: Meeting[] = [
     {
       id: '1',
-      name: 'Downtown Recovery Group',
+      name: 'EDI',
       type: 'AA',
-      time: '7:00 PM',
-      day: 'Monday',
-      location: 'Community Center',
-      address: '123 Main St, Downtown',
+      time: '7:30 AM',
+      day: 'Monday-Sunday',
+      location: 'downtown Shelton',
+      address: '125 w cota',
       description: 'Open discussion meeting for all levels',
       distance: '0.5 miles'
     },
